@@ -1,40 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { navItems } from "../data/siteContent";
 
-export default function NavBar({ setNav }: { setNav: any }) {
-  const navigate = useNavigate();
+type NavBarProps = {
+  setNav: (value: number) => void;
+};
+
+export default function NavBar({ setNav }: NavBarProps) {
   const { pathname } = useLocation();
-  const elements = [
-    { name: "Home", index: 0, path: "/home" },
-    { name: "About", index: 1, path: "/about" },
-    { name: "Docs", index: 2, path: "/docs" },
-  ];
 
   return (
-    <div className=" sm:w-64 bg-white shadow-md flex flex-col justify-between items-center py-6 h-full ">
-      <nav className="w-full flex-grow">
-        <ul className="w-full flex flex-col items-center space-y-3">
-          {elements.map((e) => (
-            <li
-              key={e.index}
-              onClick={() => {
-                setNav(0);
-                navigate(e?.path);
-              }}
-              className={`w-full text-lg sm:text-xl cursor-pointer py-3 px-6 transition duration-200 ease-in-out ${
-                pathname === e?.path || (pathname === "/" && e.path === "/home")
-                  ? "text-indigo-600 font-semibold bg-indigo-50"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {e.name}
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <footer className=" py-4 text-center text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} Shaik Afrid. All rights reserved.
-      </footer>
-    </div>
+    <nav aria-label="Mobile navigation" className="mobile-nav">
+      {navItems.map((item) => {
+        const isActive =
+          pathname === item.path || (pathname === "/" && item.path === "/home");
+
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={() => setNav(0)}
+            className={`nav-link w-full justify-between rounded-none px-4 shadow-none ${
+              isActive ? "nav-link-active" : ""
+            }`}
+          >
+            <span>{item.label}</span>
+            <span className="text-xs tracking-[0.22em] text-current">0{item.path === "/home" ? 1 : item.path === "/about" ? 2 : 3}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

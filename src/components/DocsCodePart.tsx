@@ -1,43 +1,48 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { AiOutlineCopy } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
-import { useState, useEffect } from "react";
+import type { SdkOption } from "../data/siteContent";
 
-export default function CodePart({ codeObj }: { codeObj: any }) {
+type DocsCodePartProps = {
+  codeObj: SdkOption;
+};
+
+export default function DocsCodePart({ codeObj }: DocsCodePartProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
-    if (isCopied) {
-      const timer = setTimeout(() => {
-        setIsCopied(false);
-      }, 1500); // Reset copied state after 1.5 seconds
-      return () => clearTimeout(timer);
+    if (!isCopied) {
+      return;
     }
+
+    const timer = setTimeout(() => {
+      setIsCopied(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [isCopied]);
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(codeObj.install1);
+    navigator.clipboard.writeText(codeObj.installCommand);
     setIsCopied(true);
   };
 
   return (
-    <div className="mb-4 lg:ml-0 border rounded border-gray-400">
-      <div className="bg-gray-100 py-3  rounded-md text-gray-800 px-3 text-sm flex items-center justify-between lg:text-lg">
-        <span className="font-mono">{codeObj.install1}</span>
-        <button
-          onClick={handleCopyToClipboard}
-          className={`ml-4 focus:outline-none transition duration-200 ease-in-out ${
-            isCopied ? "text-green-500" : "text-gray-600 hover:text-indigo-500"
-          }`}
-          aria-label="Copy to clipboard"
-        >
-          {isCopied ? (
-            <MdDone className="text-xl" />
-          ) : (
-            <AiOutlineCopy className="text-xl" />
-          )}
-        </button>
+    <div className="command-line rounded-none shadow-none">
+      <div className="min-w-0">
+        <p className="label mb-2">{codeObj.installLabel}</p>
+        <code className="block overflow-x-auto whitespace-pre text-sm text-[var(--muted-strong)] lg:text-base">
+          {codeObj.installCommand}
+        </code>
       </div>
+
+      <button
+        onClick={handleCopyToClipboard}
+        className="flex h-11 w-11 flex-shrink-0 items-center justify-center border border-[var(--line)] text-[var(--muted-strong)] transition hover:bg-[rgba(21,19,17,0.06)]"
+        aria-label="Copy to clipboard"
+      >
+        {isCopied ? <MdDone className="text-xl text-[var(--accent)]" /> : <AiOutlineCopy className="text-xl" />}
+      </button>
     </div>
   );
 }

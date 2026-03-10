@@ -1,55 +1,68 @@
-import { BiMenuAltRight } from "react-icons/bi";
-import LgNavBar from "./LgNavBar";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
-import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { BiMenuAltRight } from "react-icons/bi";
 import Bottom from "./Bottom";
+import LgNavBar from "./LgNavBar";
 import NavBar from "./NavBar";
 
 function ProtectedLayout() {
   const [nav, setNav] = useState(0);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setNav(0);
+  }, [pathname]);
 
   return (
-    <div>
-      <div
-        className=" flex w-full  justify-between bg-white items-center"
-        id="heroSection"
-      >
-        <img
-          onClick={() => {
-            navigate("/");
-          }}
-          src="heroLogoSmall.jpg"
-          className="w-3/5 
-           pt-2 ml-4 lg:w-1/6"
-        />
-        <li className="hidden lg:block">
-          <LgNavBar />
-        </li>
-        <li
-          className="list-none text-4xl  text-center text-gray-900 pt-5 pr-5 lg:hidden"
-          onClick={() => {
-            if (nav === 0) {
-              setNav(1);
-            } else {
-              setNav(0);
-            }
-          }}
-        >
-          {nav == 0 ? <BiMenuAltRight /> : <AiOutlineClose />}
-        </li>
-      </div>
-      <div className="absolute z-10 right-0 w-3/5 ">
-        {nav == 1 ? <NavBar setNav={setNav} /> : null}
-      </div>
+    <div className="premium-shell min-h-screen">
+      <header className="header-bar">
+        <div className="shell-width flex items-center justify-between py-4">
+          <button
+            onClick={() => navigate("/")}
+            className="brand-lockup rounded-none shadow-none"
+            aria-label="Go to home"
+          >
+            <span className="brand-mark">
+              <img
+                src="/emailapi-mark.svg"
+                alt=""
+                className="h-10 w-10 rounded-none shadow-none"
+              />
+            </span>
+            <span className="text-left text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">
+              Email API
+            </span>
+          </button>
 
-      <div>
+          <div className="hidden lg:block">
+            <LgNavBar />
+          </div>
+
+          <button
+            className="flex h-12 w-12 items-center justify-center border border-[var(--line-strong)] text-[var(--ink)] lg:hidden"
+            onClick={() => setNav(nav === 0 ? 1 : 0)}
+            aria-label={nav === 0 ? "Open navigation" : "Close navigation"}
+          >
+            {nav === 0 ? <BiMenuAltRight size={26} /> : <AiOutlineClose size={24} />}
+          </button>
+        </div>
+
+        {nav === 1 ? (
+          <div className="border-t border-[var(--line)] lg:hidden">
+            <div className="shell-width py-4">
+              <NavBar setNav={setNav} />
+            </div>
+          </div>
+        ) : null}
+      </header>
+
+      <main>
         <Outlet />
-      </div>
-      <div>
-        <Bottom />
-      </div>
+      </main>
+
+      <Bottom />
     </div>
   );
 }

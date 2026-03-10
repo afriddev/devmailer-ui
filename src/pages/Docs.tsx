@@ -1,215 +1,369 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import { BsCaretRight } from "react-icons/bs";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs";
-import "prismjs/themes/prism.css";
-import { useState } from "react";
-import CodePart from "../components/DocsCodePart";
+import { useEffect, useState } from "react";
+import { DiDart, DiPython } from "react-icons/di";
+import { LiaJava } from "react-icons/lia";
+import { TbBrandJavascript } from "react-icons/tb";
+import {
+  LuArrowRight,
+  LuBadgeCheck,
+  LuBookText,
+  LuExternalLink,
+  LuKey,
+  LuLifeBuoy,
+  LuMailCheck,
+} from "react-icons/lu";
+import DocsCodePart from "../components/DocsCodePart";
+import PremiumCodeEditor from "../components/PremiumCodeEditor";
+import {
+  requestFields,
+  sdkOptions,
+  type SdkId,
+} from "../data/siteContent";
 
-const javaScriptCode = `const emailservice = require('emailsevice');
-async function sendEmail(){
-  const response = await emailservice({toEmail:"afridayan01@gmail.com",title:"this is my title",subject:"this is my subject",body:"this is my body"})
-  // you can pass fromEmail and passkey also if you want
-  console.log(response);
-}
-sendEmail();
-`;
-
-const pythonCode = `
-from emailotp import emailotp
-emailotp = emailotp()
-#you can pass fromemail,passkey,title,subject,body also if you want
-responseFromEmailOtp = emailotp.send("toemail@gmail.com")
-print(responseFromEmailOtp["message"])
-`;
-
-const dartCode = `import 'package:email_sender/email_sender.dart';
-void main() async{
-  EmailSender emailsender = EmailSender();
-  //Enter your email in send method, you can pass many parameters like fromemail,passkey,
-  title,subject,body
-  var response = await emailsender.send("toemail@gmail.com");
-  print(response["message"]);
-}
-`;
-
-const javaCode = `//for java you need to copy emailservice package from github
-package org.emailservice;
-
-public class main {
-  public static void main(String[] args) {
-    emailservice emailSender = new emailservice("afridayan01@gmail.com", "title", "subject", "hello world!");
-    var response = emailSender.sendEmail();
-    //System.out.println(response.get("message"));
-    System.out.println(response);
+function getSdkIcon(id: SdkId) {
+  if (id === "dart") {
+    return <DiDart className="text-2xl" />;
   }
+
+  if (id === "python") {
+    return <DiPython className="text-2xl" />;
+  }
+
+  if (id === "java") {
+    return <LiaJava className="text-2xl" />;
+  }
+
+  return <TbBrandJavascript className="text-2xl" />;
 }
-`;
 
-const languageOptions = [
+const implementationNotes = [
   {
-    name: "Dart",
-    id: 0,
-    install1: "pub add email_sender",
-    gif: "dart.png",
-    code: dartCode,
+    title: "Authentication discipline",
+    description:
+      "If you use a custom Gmail sender, create a dedicated app password and keep it out of client-side code.",
   },
   {
-    name: "Java",
-    id: 1,
-    install1: "github.com/afriddev/email_service",
-    gif: "java.gif",
-    code: javaCode,
+    title: "HTML-safe workflows",
+    description:
+      "Use HTML bodies for product emails, but sanitize and control source content before sending from user-facing flows.",
   },
+  {
+    title: "Abuse-aware operations",
+    description:
+      "Keep logs and support processes ready for spam review, complaint handling, and legal escalation if the workflow grows.",
+  },
+];
 
+const faqNotes = [
   {
-    name: "JavaScript",
-    id: 2,
-    install1: "npm i @afriddev/emailservice",
-    gif: "js.gif",
-    code: javaScriptCode,
+    title: "Can I use this for product onboarding mail?",
+    description:
+      "Yes. The SDK examples and HTML body field are structured for welcome flows, verification, release notes, and lifecycle messaging.",
   },
   {
-    name: "Python",
-    id: 3,
-    install1: "pip install emailotp",
-    gif: "python.gif",
-    code: pythonCode,
+    title: "Do I need separate docs per language?",
+    description:
+      "No. The package tabs stay aligned to the same request model, which makes cross-team review much simpler.",
+  },
+  {
+    title: "What about policy review?",
+    description:
+      "The site now includes Privacy, Terms, and Security pages so teams can review abuse controls, retention language, and lawful disclosure boundaries.",
   },
 ];
 
 export default function Docs() {
-  const [code, setCode] = useState(dartCode);
-  const [selectedCodeId, setSelectedCodeId] = useState(0);
+  const [activeSdkId, setActiveSdkId] = useState<SdkId>("dart");
+  const activeSdk =
+    sdkOptions.find((option) => option.id === activeSdkId) || sdkOptions[0];
+  const [code, setCode] = useState(activeSdk.code);
 
-  function handleLanguageChange(languageId: any) {
-    const selectedLanguage = languageOptions.find(
-      (lang) => lang.id === languageId
-    );
-    if (selectedLanguage) {
-      setCode(selectedLanguage.code);
-      setSelectedCodeId(languageId);
-      const elm = document.querySelector("#dependencies");
-      elm?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
+  useEffect(() => {
+    setCode(activeSdk.code);
+  }, [activeSdk.code]);
+
+  const scrollToSetup = () => {
+    document.getElementById("setup")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
-    <div className="bg-gray-100 py-12 px-4 w-full flex items-center justify-center">
-      <div className="container ">
-        <div className="mb-10">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-4 lg:text-4xl">
-            Welcome to the Email Sender Docs
-          </h1>
-          <p className="text-lg text-gray-700 mb-6">
-            The Email Sender platform empowers developers to build features that
-            connect to every email provider. Enjoy seamless integration,
-            pre-built security and compliance, and a 99.99% guaranteed uptime.
-            Our platform is secure, reliable, and easy to use and maintain.
-          </p>
-          <button
-            className="bg-indigo-600 hover:bg-indigo-700 px-3 text-white font-semibold py-3  rounded-md flex items-center transition duration-300 ease-in-out"
-            onClick={() => {
-              const elm = document.querySelector("#dependencies");
-              elm?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}
-          >
-            Quick Start
-            <BsCaretRight className="text-xl ml-2" />
-          </button>
-        </div>
+    <div className="premium-shell">
+      <section className="section-pad">
+        <div className="shell-width split-grid">
+          <div className="space-y-6">
+            <p className="eyebrow">
+              <LuBookText />
+              Integration guide
+            </p>
+            <h1 className="display-title">
+              Implementation docs for fast, production-focused setup.
+            </h1>
+            <p className="lead-copy">
+              The Email API docs are now structured around actual implementation
+              work: choose a language, install the SDK, set an app password if
+              needed, and send HTML email with a consistent request shape.
+            </p>
 
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6 lg:text-3xl">
-            Developer Tools
-          </h2>
-          <div className="flex flex-wrap flex-grow gap-8">
-            {languageOptions.map((lang) => (
-              <div
-                key={lang.id}
-                className={`flex flex-col items-center cursor-pointer transition duration-200 ease-in-out ${
-                  selectedCodeId === lang.id
-                    ? "opacity-100"
-                    : "opacity-60 hover:opacity-100"
-                }`}
-                onClick={() => handleLanguageChange(lang.id)}
+            <div className="flex flex-wrap gap-3">
+              <button
+                className="button-primary rounded-none shadow-none"
+                onClick={scrollToSetup}
               >
-                <img
-                  src={lang.gif}
-                  alt={lang.name}
-                  className="w-12 h-12 object-contain mb-2"
-                />
-                <div className="flex items-center gap-2 text-indigo-600 font-semibold">
-                  {lang.name}
-                  <AiOutlineArrowRight className="text-xl" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div id="dependencies" className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4 lg:text-3xl">
-            Setup
-          </h2>
-          <p className="text-lg text-gray-700 mb-6">
-            Create a new file and install the required dependencies to start
-            using our Email API.
-            <br />
-            If you want to use a custom email for your app, create a new{" "}
-            <span
-              className="text-indigo-600 font-medium text-lg border-b border-indigo-600 cursor-pointer"
-              onClick={() => {
-                window.open(
-                  "https://support.google.com/accounts/answer/185833?hl=en",
-                  "_blank"
-                );
-              }}
-            >
-              app password
-            </span>
-            .
-          </p>
-
-          <div className="mb-8 ">
-            <h3 className="text-xl font-semibold text-gray-900 mb-3 lg:text-2xl">
-              Installing Dependencies
-            </h3>
-            {languageOptions.map(
-              (lang) =>
-                selectedCodeId === lang.id && (
-                  <CodePart key={lang.id} codeObj={lang} />
-                )
-            )}
+                Quick start
+                <LuArrowRight />
+              </button>
+              <a
+                href={activeSdk.packageUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="button-secondary rounded-none shadow-none"
+              >
+                Open package
+                <LuExternalLink />
+              </a>
+            </div>
           </div>
 
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3 lg:text-2xl">
-              Example Code (
-              {languageOptions.find((lang) => lang.id === selectedCodeId)?.name}
-              )
-            </h3>
-            <div>
-              <Editor
-                value={code}
-                onValueChange={setCode}
-                highlight={(code) => highlight(code, languages.js, "js")}
-                padding={20}
-                className="border border-gray-200  bg-white text-gray-800 font-mono text-xl shadow-sm"
-                style={{
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  fontSize: 15,
-                  lineHeight: "1.6",
-                  minHeight: "150px",
-                  caretColor: "#2563eb",
-                }}
+          <div className="premium-panel premium-grid-bg rounded-none p-6 shadow-none">
+            <div className="hero-image-frame rounded-none shadow-none">
+              <img
+                src="/docs-premium-grid.svg"
+                alt="Documentation and integration illustration"
+                className="rounded-none shadow-none"
               />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="metric-card rounded-none shadow-none">
+                <LuMailCheck className="mb-4 text-2xl text-[var(--accent-strong)]" />
+                <p className="label mb-2">Request model</p>
+                <p className="support-copy">
+                  Keep the payload simple: recipient, title, subject, and HTML
+                  body content.
+                </p>
+              </div>
+              <div className="metric-card rounded-none shadow-none">
+                <LuKey className="mb-4 text-2xl text-[var(--accent-strong)]" />
+                <p className="label mb-2">Auth path</p>
+                <p className="support-copy">
+                  If you use a custom Gmail sender, create an app password and
+                  plug it into your integration flow.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3 border border-[var(--line)] bg-[rgba(255,255,255,0.3)] p-4">
+              <p className="label mb-0">Supported SDKs</p>
+              <div className="chip-row">
+                {sdkOptions.map((option) => (
+                  <span key={option.id} className="data-chip">
+                    {option.name}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section id="setup" className="section-rule section-pad">
+        <div className="shell-width space-y-8">
+          <div className="space-y-4">
+            <p className="eyebrow">Setup</p>
+            <h2 className="section-title">
+              Choose the SDK, copy the install command, then send.
+            </h2>
+          </div>
+
+          <div className="docs-layout">
+            <div className="space-y-4">
+              {sdkOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setActiveSdkId(option.id)}
+                  className={`language-tab w-full flex-wrap justify-between rounded-none text-left shadow-none ${
+                    activeSdkId === option.id ? "language-tab-active" : ""
+                  }`}
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    {getSdkIcon(option.id)}
+                    <span>
+                      <span className="block text-sm font-semibold uppercase tracking-[0.18em]">
+                        {option.name}
+                      </span>
+                      <span className="mt-1 block text-xs tracking-[0.12em] opacity-70">
+                        {option.packageTarget}
+                      </span>
+                    </span>
+                  </span>
+                  <span className="badge border-[var(--line)] bg-transparent text-[var(--muted-strong)]">
+                    {option.installLabel}
+                  </span>
+                </button>
+              ))}
+
+              <div className="premium-panel rounded-none p-6 shadow-none">
+                <p className="label">Before you send</p>
+                <p className="support-copy">
+                  Need a custom Gmail sender? Create a new{" "}
+                  <a
+                    href="https://support.google.com/accounts/answer/185833?hl=en"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-link"
+                  >
+                    app password
+                  </a>{" "}
+                  so your app can authenticate cleanly.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <DocsCodePart codeObj={activeSdk} />
+
+              <div className="editor-shell premium-panel-dark rounded-none shadow-none">
+                <div className="editor-topbar">
+                  <div>
+                    <p className="label mb-1 text-[rgba(245,239,229,0.62)]">
+                      Example code
+                    </p>
+                    <p className="text-lg font-semibold tracking-[-0.03em]">
+                      {activeSdk.name}
+                    </p>
+                  </div>
+                  <a
+                    href={activeSdk.packageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="badge border-[rgba(255,255,255,0.14)] text-[rgba(245,239,229,0.82)]"
+                  >
+                    Package reference
+                  </a>
+                </div>
+                <PremiumCodeEditor
+                  value={code}
+                  onValueChange={setCode}
+                  language={activeSdk.editorLanguage}
+                  minHeight={360}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-rule section-pad">
+        <div className="shell-width space-y-8">
+          <div className="space-y-4">
+            <p className="eyebrow">Implementation notes</p>
+            <h2 className="section-title">
+              The details teams usually ask for before using a mail service in production.
+            </h2>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {implementationNotes.map((item) => (
+              <article
+                key={item.title}
+                className="premium-panel rounded-none p-6 shadow-none"
+              >
+                <h3 className="text-2xl font-semibold tracking-[-0.03em]">
+                  {item.title}
+                </h3>
+                <p className="support-copy mt-4 text-[var(--muted-strong)]">
+                  {item.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-rule section-pad">
+        <div className="shell-width space-y-8">
+          <div className="space-y-4">
+            <p className="eyebrow">Payload fields</p>
+            <h2 className="section-title">
+              The message contract is small enough to understand quickly.
+            </h2>
+          </div>
+
+          <div className="field-grid">
+            {requestFields.map((field) => (
+              <article
+                key={field.name}
+                className="field-card rounded-none shadow-none"
+              >
+                <p className="label">{field.name}</p>
+                <p className="support-copy text-[var(--muted-strong)]">
+                  {field.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-rule section-pad">
+        <div className="shell-width space-y-8">
+          <div className="space-y-4">
+            <p className="eyebrow">
+              <LuLifeBuoy />
+              FAQ
+            </p>
+            <h2 className="section-title">
+              Dense answers for integration, governance, and product use.
+            </h2>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {faqNotes.map((item) => (
+              <article
+                key={item.title}
+                className="premium-panel rounded-none p-6 shadow-none"
+              >
+                <h3 className="text-xl font-semibold tracking-[-0.03em]">
+                  {item.title}
+                </h3>
+                <p className="support-copy mt-4 text-[var(--muted-strong)]">
+                  {item.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-rule section-pad">
+        <div className="shell-width premium-panel rounded-none px-6 py-8 shadow-none md:px-10 md:py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-4">
+              <p className="eyebrow">
+                <LuBadgeCheck />
+                Ready to build
+              </p>
+              <h2 className="section-title max-w-none">
+                Install the package, adapt the example, and send your first HTML email.
+              </h2>
+              <p className="lead-copy">
+                Everything here is arranged around the next action: install,
+                configure, and send.
+              </p>
+            </div>
+
+            <button
+              onClick={scrollToSetup}
+              className="button-primary rounded-none shadow-none"
+            >
+              Jump to setup
+              <LuArrowRight />
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
