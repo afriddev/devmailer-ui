@@ -50,7 +50,7 @@ function ProtectedLayout() {
         </div>
 
         {nav === 1 ? (
-          <div className="border-t border-[var(--line)] lg:hidden">
+          <div className="mobile-menu-panel border-t border-[var(--line)] lg:hidden">
             <div className="shell-width py-4">
               <NavBar setNav={setNav} />
             </div>

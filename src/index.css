@@ -102,6 +102,10 @@ a:focus-visible {
   backdrop-filter: blur(18px);
 }
 
+.mobile-menu-panel {
+  background: #f4ede1;
+}
+
 .brand-lockup {
   display: flex;
   align-items: center;
@@ -564,7 +568,12 @@ a:focus-visible {
   }
 
   .header-bar {
+    background: #f4ede1;
     backdrop-filter: none;
+  }
+
+  .mobile-menu-panel {
+    background: #f4ede1;
   }
 
   .brand-lockup {
