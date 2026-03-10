@@ -109,7 +109,7 @@ export default function About() {
             <div className="hero-image-frame rounded-none shadow-none">
               <img
                 src="/about-premium-grid.svg"
-                alt="Email API capability illustration"
+                alt="Dev Mailer library capability illustration"
                 className="rounded-none shadow-none"
               />
             </div>

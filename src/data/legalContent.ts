@@ -26,7 +26,7 @@ export const privacyPolicy: PolicyContent = {
   eyebrow: "Privacy Policy",
   title: "Data handling written for real-world delivery, abuse control, and legal clarity.",
   intro:
-    "This Privacy Policy explains how Email API collects, uses, stores, and discloses information when you use the project website, SDKs, documentation, or related services. The service is maintained by Shaik Afrid as an independent software project.",
+    "This Privacy Policy explains how the Dev Mailer library collects, uses, stores, and discloses information when you use the project website, SDKs, documentation, or related services. The service is maintained by Shaik Afrid as an independent software project.",
   updatedAt: "March 10, 2026",
   highlights: [
     { label: "Maintainer", value: "Shaik Afrid" },
@@ -85,7 +85,7 @@ export const privacyPolicy: PolicyContent = {
     {
       title: "6. Project ownership and contact",
       paragraphs: [
-        "Email API and the related website are maintained by Shaik Afrid as an independent project. If you need privacy support, policy clarification, or abuse escalation handling, contact the maintainer through the public project channels listed on the site.",
+        "The Dev Mailer library and the related website are maintained by Shaik Afrid as an independent project. If you need privacy support, policy clarification, or abuse escalation handling, contact the maintainer through the public project channels listed on the site.",
         "If this project later adds enterprise features, a separate data processing agreement, negotiated retention terms, or additional compliance materials may apply to those specific services.",
       ],
     },
@@ -97,7 +97,7 @@ export const termsPolicy: PolicyContent = {
   eyebrow: "Terms of Use",
   title: "Service terms focused on lawful use, anti-abuse controls, and operational boundaries.",
   intro:
-    "These Terms of Use govern access to the Email API website, SDKs, docs, and related service features. By using the service, you agree to these terms. The project is maintained by Shaik Afrid as an independent software project.",
+    "These Terms of Use govern access to the Dev Mailer library website, SDKs, docs, and related service features. By using the service, you agree to these terms. The project is maintained by Shaik Afrid as an independent software project.",
   updatedAt: "March 10, 2026",
   highlights: [
     { label: "Project type", value: "Independent software project" },
@@ -167,7 +167,7 @@ export const securityPolicy: PolicyContent = {
   eyebrow: "Security Policy",
   title: "Security controls shaped around minimal access, logging discipline, and anti-abuse response.",
   intro:
-    "This Security Policy describes the operational posture of the Email API project, including monitoring, abuse handling, lawful disclosure boundaries, and the practical limits of an independently maintained service.",
+    "This Security Policy describes the operational posture of the Dev Mailer library project, including monitoring, abuse handling, lawful disclosure boundaries, and the practical limits of an independently maintained service.",
   updatedAt: "March 10, 2026",
   highlights: [
     { label: "Access model", value: "Need-to-know access wherever reasonably possible" },

@@ -135,7 +135,7 @@ export default function Home() {
                 Ship email flows that look product-grade.
               </h1>
               <p className="lead-copy">
-                Email API gives your app one clean surface for HTML email,
+                Dev Mailer gives your app one clean surface for HTML email,
                 transactional messages, and user-triggered sends. Move from
                 prototype to production with SDKs for Dart, JavaScript, Python,
                 and Java.
@@ -210,7 +210,7 @@ export default function Home() {
               <div className="hero-image-frame rounded-none shadow-none">
                 <img
                   src="/hero-premium-grid.svg"
-                  alt="Email API system illustration"
+                  alt="Dev Mailer system illustration"
                   className="rounded-none shadow-none"
                 />
               </div>

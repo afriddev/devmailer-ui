@@ -13,7 +13,7 @@ export default function Bottom() {
       <div className="shell-width section-pad !py-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.7fr_0.7fr_0.8fr]">
           <div className="space-y-4">
-            <p className="eyebrow">Email API</p>
+            <p className="eyebrow">Dev Mailer</p>
             <h2 className="section-title max-w-none text-3xl">
               Clean email infrastructure for product teams shipping quickly.
             </h2>
@@ -100,7 +100,7 @@ export default function Bottom() {
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-[var(--line)] pt-4 text-sm text-[var(--muted)] sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} Email API. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Dev Mailer. All rights reserved.</p>
           <p>Flat surfaces. Sharp lines. Cleaner docs.</p>
         </div>
       </div>

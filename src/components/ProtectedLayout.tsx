@@ -26,13 +26,13 @@ function ProtectedLayout() {
           >
             <span className="brand-mark">
               <img
-                src="/emailapi-mark.svg"
+                src="/devmailer-mark.svg"
                 alt=""
                 className="h-10 w-10 rounded-none shadow-none"
               />
             </span>
             <span className="text-left text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">
-              Email API
+              Dev Mailer
             </span>
           </button>
 

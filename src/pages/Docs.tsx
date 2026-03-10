@@ -101,7 +101,7 @@ export default function Docs() {
               Implementation docs for fast, production-focused setup.
             </h1>
             <p className="lead-copy">
-              The Email API docs are now structured around actual implementation
+              The Dev Mailer docs are now structured around actual implementation
               work: choose a language, install the SDK, set an app password if
               needed, and send HTML email with a consistent request shape.
             </p>

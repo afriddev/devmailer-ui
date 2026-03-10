@@ -433,6 +433,12 @@ a:focus-visible {
   color: var(--paper);
 }
 
+.language-tab-active .badge {
+  border-color: rgba(247, 239, 227, 0.35);
+  color: #f7efe3;
+  background: transparent;
+}
+
 .hero-media {
   display: flex;
   min-height: 100%;
